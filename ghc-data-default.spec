@@ -6,35 +6,30 @@
 Summary:	A class for types with a default value
 Summary(pl.UTF-8):	Klasa dla typów z wartością domyślną
 Name:		ghc-%{pkgname}
-Version:	0.5.3
+Version:	0.7.1.1
 Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/data-default
 Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	03a98d999273ad20d5bc0c711bf1c533
+# Source0-md5:	13ddcc28e24cd58937c7d130e885749a
+Patch0:		no-old-locale.patch
 URL:		http://hackage.haskell.org/package/data-default
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-data-default-class
-BuildRequires:	ghc-data-default-instances-base
 BuildRequires:	ghc-data-default-instances-containers
 BuildRequires:	ghc-data-default-instances-dlist
-BuildRequires:	ghc-data-default-instances-old-locale
 %if %{with prof}
 BuildRequires:	ghc-prof >= 6.12.3
 BuildRequires:	ghc-data-default-class-prof
-BuildRequires:	ghc-data-default-instances-base-prof
 BuildRequires:	ghc-data-default-instances-containers-prof
 BuildRequires:	ghc-data-default-instances-dlist-prof
-BuildRequires:	ghc-data-default-instances-old-locale-prof
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires:	ghc-data-default-class
-Requires:	ghc-data-default-instances-base
 Requires:	ghc-data-default-instances-containers
 Requires:	ghc-data-default-instances-dlist
-Requires:	ghc-data-default-instances-old-locale
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -52,10 +47,8 @@ Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	ghc-data-default-class-prof
-Requires:	ghc-data-default-instances-base-prof
 Requires:	ghc-data-default-instances-containers-prof
 Requires:	ghc-data-default-instances-dlist-prof
-Requires:	ghc-data-default-instances-old-locale-prof
 
 %description prof
 Profiling %{pkgname} library for GHC. Should be installed when
@@ -78,6 +71,7 @@ Dokumentacja w formacie HTML dla pakietu ghc %{pkgname}.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
+%patch0 -p1
 
 %build
 runhaskell Setup.lhs configure -v2 \
@@ -118,15 +112,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/HSdata-default-%{version}.o
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*.so
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*.a
+%exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*_p.a
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Data
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Data/Default.hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Data/Default.dyn_hi
 
 %if %{with prof}
 %files prof
 %defattr(644,root,root,755)
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*_p.a
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Data/Default.p_hi
 %endif
 

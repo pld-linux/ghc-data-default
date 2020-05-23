@@ -1,0 +1,19 @@
+diff -ur data-default-0.7.1.1/Data/Default.hs data-default-0.7.1.1-no-old-locale/Data/Default.hs
+--- data-default-0.7.1.1/Data/Default.hs	2016-06-26 01:01:25.000000000 +0200
++++ data-default-0.7.1.1-no-old-locale/Data/Default.hs	2020-05-23 23:12:05.628490399 +0200
+@@ -39,4 +39,3 @@
+ import Data.Default.Class
+ import Data.Default.Instances.Containers ()
+ import Data.Default.Instances.DList      ()
+-import Data.Default.Instances.OldLocale  ()
+diff -ur data-default-0.7.1.1/data-default.cabal data-default-0.7.1.1-no-old-locale/data-default.cabal
+--- data-default-0.7.1.1/data-default.cabal	2016-06-26 01:01:25.000000000 +0200
++++ data-default-0.7.1.1-no-old-locale/data-default.cabal	2020-05-23 23:16:20.131403789 +0200
+@@ -16,6 +16,5 @@
+ Library
+   Build-Depends:     base >=2 && <5, data-default-class >=0.1.2.0,
+                      data-default-instances-containers,
+-                     data-default-instances-dlist,
+-                     data-default-instances-old-locale
++                     data-default-instances-dlist
+   Exposed-Modules:   Data.Default
