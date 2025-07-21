@@ -16,18 +16,22 @@ Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{v
 Patch0:		no-old-locale.patch
 URL:		http://hackage.haskell.org/package/data-default
 BuildRequires:	ghc >= 6.12.3
-BuildRequires:	ghc-data-default-class
+BuildRequires:	ghc-base >= 2
+BuildRequires:	ghc-base < 5
+BuildRequires:	ghc-data-default-class >= 0.1.2.0
 BuildRequires:	ghc-data-default-instances-containers
 BuildRequires:	ghc-data-default-instances-dlist
 %if %{with prof}
+BuildRequires:	ghc-base-prof >= 2
 BuildRequires:	ghc-prof >= 6.12.3
-BuildRequires:	ghc-data-default-class-prof
+BuildRequires:	ghc-data-default-class-prof >= 0.1.2.0
 BuildRequires:	ghc-data-default-instances-containers-prof
 BuildRequires:	ghc-data-default-instances-dlist-prof
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
-Requires:	ghc-data-default-class
+Requires:	ghc-base >= 2
+Requires:	ghc-data-default-class >= 0.1.2.0
 Requires:	ghc-data-default-instances-containers
 Requires:	ghc-data-default-instances-dlist
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -46,7 +50,8 @@ Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	ghc-data-default-class-prof
+Requires:	ghc-base-prof >= 2
+Requires:	ghc-data-default-class-prof >= 0.1.2.0
 Requires:	ghc-data-default-instances-containers-prof
 Requires:	ghc-data-default-instances-dlist-prof
 
@@ -82,6 +87,7 @@ runhaskell Setup.lhs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.lhs build
+
 runhaskell Setup.lhs haddock --executables
 
 %install
@@ -112,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSdata-default-%{version}-*_p.a
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Data
